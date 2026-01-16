@@ -28,7 +28,7 @@ def gerar_texto(prompt_sistema, prompt_usuario):
                 "X-Title": "Eroticizza App",
             },
             # Usando modelo GRÁTIS para teste. Depois mude para: "nousresearch/nous-hermes-2-mixtral-8x7b-dpo"
-            model="mistralai/mistral-7b-instruct:free", 
+            model="meta-llama/llama-3-8b-instruct:free", 
             messages=[
                 {"role": "system", "content": prompt_sistema},
                 {"role": "user", "content": prompt_usuario},
