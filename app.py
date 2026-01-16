@@ -23,7 +23,7 @@ def gerar_texto(prompt_sistema, prompt_usuario):
                 "HTTP-Referer": "https://seu-site.com", # Pode ser qualquer coisa
                 "X-Title": "Eroticizza App",
             },
-            model="nousresearch/nous-hermes-2-mixtral-8x7b-dpo", # Modelo excelente e sem filtro
+            model="mistralai/mistral-7b-instruct:free", # Modelo excelente e sem filtro
             messages=[
                 {"role": "system", "content": prompt_sistema},
                 {"role": "user", "content": prompt_usuario},
