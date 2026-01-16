@@ -20,7 +20,7 @@ def gerar_texto(prompt_sistema, prompt_usuario):
         
         chat_completion = client.chat.completions.create(
             # Modelo Mixtral (Excelente, rápido e criativo)
-            model="llama3-70b-8192", 
+            model="llama-3.3-70b-versatile", 
             messages=[
                 {"role": "system", "content": prompt_sistema},
                 {"role": "user", "content": prompt_usuario},
