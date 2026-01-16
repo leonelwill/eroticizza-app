@@ -20,7 +20,6 @@ client = OpenAI(
 )
 
 # Função para chamar a IA
-# Função para chamar a IA
 def gerar_texto(prompt_sistema, prompt_usuario):
     try:
         completion = client.chat.completions.create(
@@ -29,7 +28,7 @@ def gerar_texto(prompt_sistema, prompt_usuario):
                 "X-Title": "Eroticizza App",
             },
             # Trocamos para o Llama 3 Free que costuma estar sempre online
-            model="meta-llama/llama-3-8b-instruct:free", 
+            model="gryphe/mythomax-l2-13b", 
             messages=[
                 {"role": "system", "content": prompt_sistema},
                 {"role": "user", "content": prompt_usuario},
