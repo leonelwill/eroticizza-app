@@ -6,7 +6,7 @@ from fpdf import FPDF
 # ==========================================
 # COLE SUA CHAVE AQUI
 # ==========================================
-MINHA_CHAVE_GOOGLE = "COLE_SUA_CHAVE_AIZA_AQUI" 
+MINHA_CHAVE_GOOGLE = "AIzaSyBuxA433U7YWXQ5baurlLbzj8QFQzSa2v4" 
 
 st.set_page_config(page_title="Eroticizza", layout="wide")
 
