@@ -20,6 +20,7 @@ client = OpenAI(
 )
 
 # Função para chamar a IA
+# Função para chamar a IA
 def gerar_texto(prompt_sistema, prompt_usuario):
     try:
         completion = client.chat.completions.create(
@@ -27,7 +28,7 @@ def gerar_texto(prompt_sistema, prompt_usuario):
                 "HTTP-Referer": "https://localhost:8501", 
                 "X-Title": "Eroticizza App",
             },
-            # Usando modelo GRÁTIS para teste. Depois mude para: "nousresearch/nous-hermes-2-mixtral-8x7b-dpo"
+            # Trocamos para o Llama 3 Free que costuma estar sempre online
             model="meta-llama/llama-3-8b-instruct:free", 
             messages=[
                 {"role": "system", "content": prompt_sistema},
@@ -38,7 +39,7 @@ def gerar_texto(prompt_sistema, prompt_usuario):
         return completion.choices[0].message.content
     except Exception as e:
         return f"ERRO CRÍTICO NA IA: {e}"
-
+        
 # --- INICIALIZAÇÃO DE MEMÓRIA ---
 if 'step' not in st.session_state:
     st.session_state.step = 1
