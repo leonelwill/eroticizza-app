@@ -6,7 +6,7 @@ from fpdf import FPDF
 # ==========================================
 # CONFIGURAÇÃO DA CHAVE (COLE AQUI)
 # ==========================================
-MINHA_CHAVE_GROQ = "COLE_SUA_CHAVE_GSK_AQUI" 
+MINHA_CHAVE_GROQ = "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" 
 # Exemplo: "gsk_8A7s9d8a7s9d8a7s..." (Mantenha as aspas!)
 
 # Configuração da Página
