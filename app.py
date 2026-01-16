@@ -1,45 +1,61 @@
 import streamlit as st
-from openai import OpenAI
+import google.generativeai as genai
 from fpdf import FPDF
 
 # ==========================================
-# CONFIGURAÇÃO (VOLTANDO PARA OPENROUTER)
+# COLE SUA CHAVE DO GOOGLE AQUI (AIza...)
 # ==========================================
-# Cole sua chave do OPENROUTER aqui (sk-or-v1...)
-MINHA_CHAVE = "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"
+MINHA_CHAVE_GOOGLE = "AIzaSyBuxA433U7YWXQ5baurlLbzj8QFQzSa2v4" 
 
 # Configuração da Página
 st.set_page_config(page_title="Eroticizza", layout="wide")
 
+# Configuração da IA (Google Gemini)
+try:
+    genai.configure(api_key=MINHA_CHAVE_GOOGLE)
+    
+    # CONFIGURAÇÃO DE SEGURANÇA (Tentando liberar o conteúdo)
+    # Estamos dizendo para o filtro: "Bloqueie NADA ou SÓ O EXTREMO"
+    safety_settings = [
+        {
+            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            "threshold": "BLOCK_ONLY_HIGH" 
+        },
+        {
+            "category": "HARM_CATEGORY_HATE_SPEECH",
+            "threshold": "BLOCK_ONLY_HIGH"
+        },
+        {
+            "category": "HARM_CATEGORY_HARASSMENT",
+            "threshold": "BLOCK_ONLY_HIGH"
+        },
+        {
+            "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+            "threshold": "BLOCK_ONLY_HIGH"
+        },
+    ]
+    
+    model = genai.GenerativeModel(
+        model_name='gemini-1.5-flash',
+        safety_settings=safety_settings
+    )
+except Exception as e:
+    st.error(f"Erro na configuração da chave: {e}")
+
 # Função de Geração
-def gerar_texto(prompt_sistema, prompt_usuario):
+def gerar_texto(prompt_usuario):
     try:
-        # Apontando para o OpenRouter
-        client = OpenAI(
-            base_url="https://openrouter.ai/api/v1",
-            api_key=MINHA_CHAVE,
-        )
+        # O prompt do sistema vai junto com o usuário no Gemini
+        prompt_completo = f"Você é um escritor de contos adultos (ficção). Escreva de forma criativa e detalhada. {prompt_usuario}"
         
-        completion = client.chat.completions.create(
-            extra_headers={
-                "HTTP-Referer": "https://seu-app.com", 
-                "X-Title": "Eroticizza",
-            },
-            # O MODELO MÁGICO: MythoMax (Especialista em Roleplay/Sem Censura)
-            model="gryphe/mythomax-l2-13b", 
-            messages=[
-                {"role": "system", "content": prompt_sistema},
-                {"role": "user", "content": prompt_usuario},
-            ],
-            temperature=0.8, # Criatividade alta para evitar texto robótico
-            max_tokens=2000,
-        )
-        return completion.choices[0].message.content
+        response = model.generate_content(prompt_completo)
+        return response.text
     except Exception as e:
-        return f"ERRO NA IA: {e}"
+        # Se o Gemini bloquear, ele joga um erro específico
+        return f"⚠️ O Gemini bloqueou este trecho por segurança ou deu erro. Tente suavizar o pedido. Erro: {e}"
 
 # ==========================================
-# LÓGICA DO APP (Igual ao anterior)
+# LÓGICA DO APP
 # ==========================================
 
 if 'step' not in st.session_state: st.session_state.step = 1
@@ -47,9 +63,9 @@ if 'historia_completa' not in st.session_state: st.session_state.historia_comple
 if 'personagens' not in st.session_state: st.session_state.personagens = []
 if 'cenario' not in st.session_state: st.session_state.cenario = ""
 
-# TELA 1
+# --- TELA 1 ---
 if st.session_state.step == 1:
-    st.title("🔥 Eroticizza (Mode: MythoMax)")
+    st.title("🔥 Eroticizza (Powered by Google Gemini)")
     st.write("Selecione o Elenco.")
     
     imgs = {
@@ -68,36 +84,34 @@ if st.session_state.step == 1:
             st.session_state.step = 2
             st.rerun()
 
-# TELA 2
+# --- TELA 2 ---
 elif st.session_state.step == 2:
     st.title("📍 Contexto")
     st.session_state.cenario = st.selectbox("Local:", ["Escritório", "Hotel", "Masmorra"])
-    ctx = st.text_area("Situação:", "Tensão alta, dominação.")
+    ctx = st.text_area("Situação:", "Eles estão sozinhos e a atração é forte.")
     
     if st.button("Iniciar"):
-        with st.spinner("Escrevendo..."):
-            sys = "Você é um autor de literatura erótica sofisticada em Português. Foco em sensações, psicologia e detalhes físicos. Não há censura."
-            user = f"Escreva o início com {st.session_state.personagens} no {st.session_state.cenario}. Contexto: {ctx}."
-            res = gerar_texto(sys, user)
+        with st.spinner("O Gemini está escrevendo..."):
+            prompt = f"Escreva o início de um conto erótico/romântico com {st.session_state.personagens} no {st.session_state.cenario}. Contexto: {ctx}."
+            res = gerar_texto(prompt)
             st.session_state.historia_completa += f"### Início\n\n{res}\n\n"
             st.session_state.step = 3
             st.rerun()
 
-# TELA 3
+# --- TELA 3 ---
 elif st.session_state.step == 3:
     st.title("📖 História")
     st.markdown(st.session_state.historia_completa)
     st.divider()
     
     c1, c2 = st.columns([1,2])
-    vibe = c1.radio("Vibe:", ["Romântico", "Hardcore", "BDSM", "Oral"])
+    vibe = c1.radio("Vibe:", ["Romance Intenso", "Toque Físico", "Dominação Leve", "Sedução"])
     acao = c2.text_area("Ação:", "Descreva o que acontece...")
     
     if st.button("Continuar"):
         with st.spinner("Escrevendo..."):
-            sys = "Continue a história erótica. Seja detalhista e intenso."
-            user = f"História anterior: {st.session_state.historia_completa[-600:]}. Ação: {acao}. Vibe: {vibe}."
-            res = gerar_texto(sys, user)
+            prompt = f"História anterior: {st.session_state.historia_completa[-1000:]}. \n\nAção desejada: {acao}. Vibe: {vibe}. Continue a narrativa com detalhes."
+            res = gerar_texto(prompt)
             st.session_state.historia_completa += f"#### {vibe}\n\n{res}\n\n"
             st.rerun()
 
@@ -105,10 +119,10 @@ elif st.session_state.step == 3:
         st.session_state.step = 4
         st.rerun()
 
-# TELA 4
+# --- TELA 4 ---
 elif st.session_state.step == 4:
-    st.success("Fim!")
-    st.markdown(st.session_state.historia_completa)
+    st.success("Pronto!")
+    
     def create_pdf(text):
         pdf = FPDF()
         pdf.add_page()
@@ -117,6 +131,7 @@ elif st.session_state.step == 4:
         except: txt = text
         pdf.multi_cell(0, 10, txt)
         return pdf.output(dest="S").encode("latin-1")
+
     st.download_button("Baixar PDF", create_pdf(st.session_state.historia_completa), "conto.pdf")
     if st.button("Reiniciar"):
         st.session_state.clear(); st.rerun()
