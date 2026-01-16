@@ -6,7 +6,7 @@ from fpdf import FPDF
 # CONFIGURAÇÃO (VOLTANDO PARA OPENROUTER)
 # ==========================================
 # Cole sua chave do OPENROUTER aqui (sk-or-v1...)
-MINHA_CHAVE = "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"
+MINHA_CHAVE = "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"
 
 # Configuração da Página
 st.set_page_config(page_title="Eroticizza", layout="wide")
