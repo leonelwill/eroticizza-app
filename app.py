@@ -13,7 +13,7 @@ st.set_page_config(page_title="Eroticizza", layout="wide")
 # --- CONFIGURAÇÃO DA IA (OpenRouter) ---
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key="sk-or-v1-SUA-CHAVE-GIGANTE-AQUI...", # Cole sua chave real aqui dentro das aspas
+    api_key="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", # Cole sua chave real aqui dentro das aspas
 )
 
 def gerar_texto(prompt_sistema, prompt_usuario):
