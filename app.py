@@ -11,10 +11,9 @@ load_dotenv()
 st.set_page_config(page_title="Eroticizza", layout="wide")
 
 # --- CONFIGURAÇÃO DA IA (OpenRouter) ---
-# Usaremos o modelo "Nous Hermes 2 Mixtral" ou "Dolphin" (famosos por não terem censura)
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("OPENROUTER_API_KEY"),
+    api_key="sk-or-v1-SUA-CHAVE-GIGANTE-AQUI...", # Cole sua chave real aqui dentro das aspas
 )
 
 def gerar_texto(prompt_sistema, prompt_usuario):
