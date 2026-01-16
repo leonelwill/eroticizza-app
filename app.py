@@ -6,7 +6,7 @@ from fpdf import FPDF
 
 # COLE SUA CHAVE NOVA DENTRO DAS ASPAS ABAIXO
 # Cuidado para não deixar espaços em branco antes ou depois da chave!
-MINHA_CHAVE_OPENROUTER = "sk-or-v1-SEU-CODIGO-GIGANTE-AQUI"
+MINHA_CHAVE_OPENROUTER = "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"
 
 # --- FIM DA ÁREA DE CONFIGURAÇÃO ---
 
