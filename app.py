@@ -12,36 +12,42 @@ API_KEY = "sk-or-v1-b4fed8700d6b3cacb92f353926020e4c30124c5d48113dde958ebb04b8dc
 
 st.set_page_config(page_title="Eroticizza", layout="wide")
 
-# Função de Conexão MANUAL (Bypass de Biblioteca)
+# Função de Conexão MANUAL (Motor Atualizado: Midnight Rose 70B)
 def gerar_texto(prompt_sistema, prompt_usuario):
     url = "https://openrouter.ai/api/v1/chat/completions"
     
     headers = {
         "Authorization": f"Bearer {API_KEY}",
-        "HTTP-Referer": "https://eroticizza.streamlit.app", # Necessário para o OpenRouter
+        "HTTP-Referer": "https://eroticizza.streamlit.app",
         "X-Title": "Eroticizza",
         "Content-Type": "application/json"
     }
     
+    # Reforçando o comando de idioma no sistema
+    sistema_reforcado = (
+        f"{prompt_sistema} "
+        "IMPORTANTE: Escreva EXCLUSIVAMENTE em Português do Brasil. "
+        "Use linguagem natural, fluida e culta. Não use palavras em outros idiomas. "
+        "Mantenha a coerência do cenário (não invente objetos que não existem no local)."
+    )
+    
     data = {
-        # MODELO: MythoMax (O rei do erotismo sem censura)
-        "model": "gryphe/mythomax-l2-13b", 
+        # O "ROLLS ROYCE" DOS CONTOS (Midnight Rose 70B)
+        "model": "sophosympatheia/midnight-rose-70b-v2.0.3", 
         "messages": [
-            {"role": "system", "content": prompt_sistema},
+            {"role": "system", "content": sistema_reforcado},
             {"role": "user", "content": prompt_usuario}
         ],
-        "temperature": 0.85, # Temperatura alta para mais criatividade
-        "max_tokens": 2000
+        "temperature": 0.78, # Ajustado para evitar alucinações (palavras erradas)
+        "max_tokens": 2500   # Permite capítulos maiores
     }
     
     try:
-        # Envia o pedido direto para o servidor (sem passar por bibliotecas bugadas)
         response = requests.post(url, headers=headers, json=data)
         
         if response.status_code == 200:
             return response.json()['choices'][0]['message']['content']
         else:
-            # Se der erro, mostra exatamente o que é (ex: falta de crédito)
             erro = response.json()
             return f"Erro OpenRouter: {response.status_code} - {erro.get('error', {}).get('message', 'Erro desconhecido')}"
             
