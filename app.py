@@ -8,10 +8,10 @@ from fpdf import FPDF
 CHAVE_BRUTA = "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"
 API_KEY = CHAVE_BRUTA.strip() 
 
-st.set_page_config(page_title="Eroticizza Hermes", layout="wide")
+st.set_page_config(page_title="Eroticizza Slow Burn", layout="wide")
 
 # ==========================================
-# MOTOR DA IA: Hermes 3 (Llama 3.1 70B Uncensored)
+# MOTOR DA IA: Hermes 3 (Com Freio de Ritmo)
 # ==========================================
 def gerar_texto(prompt_sistema, prompt_usuario):
     url = "https://openrouter.ai/api/v1/chat/completions"
@@ -23,31 +23,26 @@ def gerar_texto(prompt_sistema, prompt_usuario):
         "Content-Type": "application/json"
     }
     
-    # Prompt "Hardcore" Mantido
-    sistema_calibrado = (
+    # PROMPT DE RITMO (SLOW BURN)
+    sistema_ritmado = (
         f"{prompt_sistema} "
-        "DIRETRIZES OBRIGATÓRIAS (MODO HARDCORE):"
-        "1. VOCABULÁRIO SUJO: Use palavras reais e cruas: pau, pica, rola, cu, rabo, buceta, gozo, porra. Nada de termos médicos."
-        "2. ANATOMIA VISCERAL: Descreva veias, glande, lubrificação, cheiros e contrações musculares."
-        "3. SEM POESIA: Proibido usar metáforas como 'membro', 'lampião', 'vênus'. Seja direto."
-        "4. HUMILHAÇÃO REAL: Se a cena pede dominação, descreva o medo, a submissão e a degradação verbal."
-        "5. IDIOMA: Português do Brasil natural. NUNCA use inglês."
-        "6. LÓGICA: Mantenha a coerência da cena (sem objetos mágicos)."
+        "REGRAS DE RITMO E ESTRUTURA (CRUCIAIS):"
+        "1. PROIBIDO FINALIZAR: Esta é apenas a INTRODUÇÃO. NÃO descreva o clímax, orgasmo ou finalização do ato sexual agora."
+        "2. TENSÃO (SLOW BURN): Foque no 'antes'. Descreva a aproximação, o cheiro, o medo, a primeira humilhação verbal, o primeiro toque."
+        "3. CORTA A CENA: Termine o texto num momento de suspense (cliffhanger), esperando a próxima ação do usuário."
+        "4. ESTILO HARDCORE: Mantenha a linguagem suja e anatômica (pau, cu, etc), mas guarde a ação principal para depois."
+        "5. SEM PRESSA: Descreva o ambiente, a respiração e a psicologia dos personagens detalhadamente."
     )
     
     data = {
-        # MUDANÇA: Hermes 3 (Inteligente E Sem Censura)
         "model": "nousresearch/hermes-3-llama-3.1-70b", 
         "messages": [
-            {"role": "system", "content": sistema_calibrado},
+            {"role": "system", "content": sistema_ritmado},
             {"role": "user", "content": prompt_usuario}
         ],
-        "temperature": 0.75, # Um pouco mais alta para criatividade
-        "max_tokens": 2500,
-        
-        # A CURA DO "NÃCA NÃCA":
-        "repetition_penalty": 1.1, # Penaliza a IA se ela começar a repetir palavras
-        "top_p": 0.9
+        "temperature": 0.7, 
+        "max_tokens": 1500, # Diminuí os tokens para ele não se empolgar e escrever um livro
+        "repetition_penalty": 1.1
     }
     
     try:
@@ -56,12 +51,7 @@ def gerar_texto(prompt_sistema, prompt_usuario):
         if response.status_code == 200:
             return response.json()['choices'][0]['message']['content']
         else:
-            try:
-                erro = response.json()
-                msg = erro.get('error', {}).get('message', str(erro))
-                return f"Erro OpenRouter ({response.status_code}): {msg}"
-            except:
-                return f"Erro Bruto: {response.text}"
+            return f"Erro: {response.text}"
             
     except Exception as e:
         return f"Erro de conexão: {e}"
@@ -76,8 +66,8 @@ if 'personagens' not in st.session_state: st.session_state.personagens = []
 
 # TELA 1
 if st.session_state.step == 1:
-    st.title("🔥 Eroticizza (Hermes 3 Edition)")
-    st.markdown("**Motor:** Hermes 3 - Llama 3.1 70B (Inteligente & Sujo).")
+    st.title("🔥 Eroticizza (Ritmo Controlado)")
+    st.markdown("**Calibragem:** Hardcore, mas focado em construção de tensão (sem finalização rápida).")
     
     imgs = {
         "O Executivo": "https://via.placeholder.com/300?text=Executivo",
@@ -98,23 +88,19 @@ if st.session_state.step == 1:
 # TELA 2
 elif st.session_state.step == 2:
     st.title("📍 Contexto")
-    local = st.selectbox("Local:", ["Escritório", "Vestiário", "Motel", "Carro"])
+    local = st.selectbox("Local:", ["Escritório", "Vestiário", "Carro"])
+    ctx = st.text_area("Cena:", "O Lutador encurrala o Executivo. Ele quer cobrar a dívida. O Executivo sente medo.")
     
-    ctx = st.text_area("Descreva a cena (Seja explícito):", "O Lutador cobra a dívida do Executivo. Ele quer humilhação total. O Executivo sente medo e prazer.")
-    
-    if st.button("Gerar Início"):
-        with st.spinner("O Hermes está escrevendo..."):
-            sys = "Você é um escritor de contos eróticos hardcore."
-            user = f"Escreva o início com {st.session_state.personagens} no {local}. Contexto: {ctx}. Use linguagem suja e anatômica."
+    if st.button("Gerar Tensão Inicial"):
+        with st.spinner("Criando suspense..."):
+            sys = "Você é um escritor de erotismo focado em 'Slow Burn' (queima lenta)."
+            # Instrução explícita para parar antes do ato
+            user = f"Escreva SOMENTE O INÍCIO da cena com {st.session_state.personagens} no {local}. Contexto: {ctx}. Pare antes do ato sexual começar de verdade. Crie tensão."
             
             res = gerar_texto(sys, user)
-            
-            if "Erro" in res:
-                st.error(res)
-            else:
-                st.session_state.historia += f"### O Início\n\n{res}\n\n"
-                st.session_state.step = 3
-                st.rerun()
+            st.session_state.historia += f"### Cena 1: A Abordagem\n\n{res}\n\n"
+            st.session_state.step = 3
+            st.rerun()
 
 # TELA 3
 elif st.session_state.step == 3:
@@ -122,15 +108,15 @@ elif st.session_state.step == 3:
     st.divider()
     
     c1, c2 = st.columns([1,2])
-    vibe = c1.radio("Foco:", ["Humilhação Verbal", "Sexo Oral", "Anal Brutal", "Dominação"])
-    acao = c2.text_area("Ação:", "O que acontece agora?")
+    vibe = c1.radio("Agora sim, o que acontece?:", ["O Lutador tira a roupa", "O Executivo implora", "Primeiro toque agressivo"])
+    acao = c2.text_area("Descreva a ação:", "Ele obriga o executivo a se ajoelhar...")
     
-    if st.button("Continuar"):
+    if st.button("Avançar Cena"):
         with st.spinner("Escrevendo..."):
-            sys = "Continue a narrativa mantendo o tom sujo."
-            user = f"História anterior: {st.session_state.historia[-1500:]}. Ação: {acao}. Vibe: {vibe}."
+            sys = "Continue a cena. Aumente a intensidade, mas mantenha o realismo."
+            user = f"História anterior: {st.session_state.historia[-1000:]}. Ação: {acao}. Vibe: {vibe}."
             res = gerar_texto(sys, user)
-            st.session_state.historia += f"#### {vibe}\n\n{res}\n\n"
+            st.session_state.historia += f"#### Cena 2\n\n{res}\n\n"
             st.rerun()
 
     if st.button("Finalizar"):
@@ -141,6 +127,7 @@ elif st.session_state.step == 3:
 elif st.session_state.step == 4:
     st.success("Fim!")
     st.markdown(st.session_state.historia)
+    # (Código do PDF igual ao anterior...)
     def create_pdf(text):
         pdf = FPDF()
         pdf.add_page()
