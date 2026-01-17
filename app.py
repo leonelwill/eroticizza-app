@@ -38,7 +38,7 @@ def gerar_texto(prompt_sistema, prompt_usuario):
     
     data = {
         # O MODELO "FERRARI" (Midnight Rose 70B - Alta Qualidade)
-        "model": "sophosympatheia/midnight-rose-70b-v2.0.3", 
+        "model": "sophosympatheia/midnight-rose-70b", 
         "messages": [
             {"role": "system", "content": sistema_blindado},
             {"role": "user", "content": prompt_usuario}
