@@ -8,10 +8,10 @@ from fpdf import FPDF
 CHAVE_BRUTA = "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"
 API_KEY = CHAVE_BRUTA.strip() 
 
-st.set_page_config(page_title="Eroticizza Hardcore", layout="wide")
+st.set_page_config(page_title="Eroticizza Hermes", layout="wide")
 
 # ==========================================
-# MOTOR DA IA: WizardLM-2 (Com Prompt Agressivo)
+# MOTOR DA IA: Hermes 3 (Llama 3.1 70B Uncensored)
 # ==========================================
 def gerar_texto(prompt_sistema, prompt_usuario):
     url = "https://openrouter.ai/api/v1/chat/completions"
@@ -23,28 +23,31 @@ def gerar_texto(prompt_sistema, prompt_usuario):
         "Content-Type": "application/json"
     }
     
-    # AQUI ESTÁ A "CALIBRAGEM" QUE VOCÊ PEDIU
-    # Estamos transformando o "Filósofo" em um "Diretor de Filme Adulto"
+    # Prompt "Hardcore" Mantido
     sistema_calibrado = (
         f"{prompt_sistema} "
-        "REGRAS DE ESTILO OBRIGATÓRIAS (MODO HARDCORE):"
-        "1. VOCABULÁRIO SUJO: Pare de usar termos médicos ou poéticos. Use as palavras reais: pau, rola, pica, cu, rabo, buceta, gozo, porra, leite."
-        "2. ANATOMIA VISCERAL: Descreva detalhes físicos. Fale do tamanho, da espessura, das veias saltadas, da cor da cabeça, da lubrificação."
-        "3. PROIBIDO POESIA: Nunca use palavras como 'lampião', 'membro viril', 'vênus', 'cópula'. Isso é proibido. Seja cru e direto."
-        "4. AÇÃO FÍSICA: Se o usuário pedir humilhação, descreva a submissão real (tapas, puxões de cabelo, ordens verbais, cuspe)."
-        "5. SEM MORALISMO: Não crie lições de moral no final. É um conto erótico, o objetivo é o tesão."
-        "6. IDIOMA: Português do Brasil coloquial. Sem frases em inglês."
+        "DIRETRIZES OBRIGATÓRIAS (MODO HARDCORE):"
+        "1. VOCABULÁRIO SUJO: Use palavras reais e cruas: pau, pica, rola, cu, rabo, buceta, gozo, porra. Nada de termos médicos."
+        "2. ANATOMIA VISCERAL: Descreva veias, glande, lubrificação, cheiros e contrações musculares."
+        "3. SEM POESIA: Proibido usar metáforas como 'membro', 'lampião', 'vênus'. Seja direto."
+        "4. HUMILHAÇÃO REAL: Se a cena pede dominação, descreva o medo, a submissão e a degradação verbal."
+        "5. IDIOMA: Português do Brasil natural. NUNCA use inglês."
+        "6. LÓGICA: Mantenha a coerência da cena (sem objetos mágicos)."
     )
     
     data = {
-        # Voltamos para o WizardLM porque ele tem lógica e está online
-        "model": "microsoft/wizardlm-2-8x22b", 
+        # MUDANÇA: Hermes 3 (Inteligente E Sem Censura)
+        "model": "nousresearch/hermes-3-llama-3.1-70b", 
         "messages": [
             {"role": "system", "content": sistema_calibrado},
             {"role": "user", "content": prompt_usuario}
         ],
-        "temperature": 0.65, # Temperatura média para ele obedecer o estilo sem perder a criatividade
-        "max_tokens": 2500
+        "temperature": 0.75, # Um pouco mais alta para criatividade
+        "max_tokens": 2500,
+        
+        # A CURA DO "NÃCA NÃCA":
+        "repetition_penalty": 1.1, # Penaliza a IA se ela começar a repetir palavras
+        "top_p": 0.9
     }
     
     try:
@@ -73,8 +76,8 @@ if 'personagens' not in st.session_state: st.session_state.personagens = []
 
 # TELA 1
 if st.session_state.step == 1:
-    st.title("🔥 Eroticizza (Mode: Realista/Sujo)")
-    st.markdown("**Calibragem:** Vocabulário explícito e anatomia detalhada.")
+    st.title("🔥 Eroticizza (Hermes 3 Edition)")
+    st.markdown("**Motor:** Hermes 3 - Llama 3.1 70B (Inteligente & Sujo).")
     
     imgs = {
         "O Executivo": "https://via.placeholder.com/300?text=Executivo",
@@ -95,15 +98,14 @@ if st.session_state.step == 1:
 # TELA 2
 elif st.session_state.step == 2:
     st.title("📍 Contexto")
-    local = st.selectbox("Local:", ["Escritório Corporativo", "Vestiário da Academia", "Quarto de Motel", "Carro"])
+    local = st.selectbox("Local:", ["Escritório", "Vestiário", "Motel", "Carro"])
     
-    st.warning("⚠️ Dica: Para o melhor resultado, seja explícito no contexto abaixo.")
-    ctx = st.text_area("Descreva a cena:", "O Lutador vai cobrar a dívida do Executivo. Ele quer humilhar o Executivo. O Executivo é passivo e tem medo, mas sente prazer.")
+    ctx = st.text_area("Descreva a cena (Seja explícito):", "O Lutador cobra a dívida do Executivo. Ele quer humilhação total. O Executivo sente medo e prazer.")
     
     if st.button("Gerar Início"):
-        with st.spinner("Escrevendo (Estilo Hardcore)..."):
-            sys = "Você é um escritor de contos eróticos explícitos (smut)."
-            user = f"Escreva o início com {st.session_state.personagens} no {local}. Contexto: {ctx}. Use os nomes dos personagens. Descreva a anatomia."
+        with st.spinner("O Hermes está escrevendo..."):
+            sys = "Você é um escritor de contos eróticos hardcore."
+            user = f"Escreva o início com {st.session_state.personagens} no {local}. Contexto: {ctx}. Use linguagem suja e anatômica."
             
             res = gerar_texto(sys, user)
             
@@ -120,12 +122,12 @@ elif st.session_state.step == 3:
     st.divider()
     
     c1, c2 = st.columns([1,2])
-    vibe = c1.radio("Foco da Cena:", ["Humilhação Verbal", "Sexo Oral Profundo", "Dominação Física", "Anal Sem Preparo"])
-    acao = c2.text_area("O que acontece agora?", "Ex: O Lutador tira o pau para fora e obriga...")
+    vibe = c1.radio("Foco:", ["Humilhação Verbal", "Sexo Oral", "Anal Brutal", "Dominação"])
+    acao = c2.text_area("Ação:", "O que acontece agora?")
     
     if st.button("Continuar"):
         with st.spinner("Escrevendo..."):
-            sys = "Continue a narrativa mantendo a linguagem suja."
+            sys = "Continue a narrativa mantendo o tom sujo."
             user = f"História anterior: {st.session_state.historia[-1500:]}. Ação: {acao}. Vibe: {vibe}."
             res = gerar_texto(sys, user)
             st.session_state.historia += f"#### {vibe}\n\n{res}\n\n"
